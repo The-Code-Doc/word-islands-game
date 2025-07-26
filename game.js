@@ -1,74 +1,79 @@
 window.onload = function () {
+  class WordUnscrambleScene extends Phaser.Scene {
+    constructor() {
+      super({ key: "WordUnscrambleScene" });
+    }
+
+    init(data) {
+      this.originalWord = data.word || "planet";
+      this.scrambledWord = this.shuffleWord(this.originalWord);
+    }
+
+    preload() {}
+
+    create() {
+      this.add.text(400, 50, "Unscramble the Word!", {
+        fontSize: "32px",
+        fill: "#003",
+        fontFamily: "Quicksand"
+      }).setOrigin(0.5);
+
+      this.feedback = this.add.text(400, 140, "", {
+        fontSize: "20px",
+        fill: "#007700"
+      }).setOrigin(0.5);
+
+      this.inputField = this.add.dom(400, 200, 'input', {
+        type: 'text',
+        fontSize: '20px',
+        width: '200px',
+        padding: '10px'
+      });
+
+      this.scrambleText = this.add.text(400, 280, this.scrambledWord, {
+        fontSize: "28px",
+        color: "#004d40",
+        fontFamily: "Quicksand"
+      }).setOrigin(0.5);
+
+      const submitBtn = this.add.text(400, 360, "Submit", {
+        fontSize: "22px",
+        backgroundColor: "#00c2ff",
+        color: "#fff",
+        padding: { x: 15, y: 8 }
+      }).setOrigin(0.5).setInteractive();
+
+      submitBtn.on("pointerdown", () => {
+        const input = this.inputField.node.value.trim().toLowerCase();
+        if (input === this.originalWord) {
+          this.feedback.setText("✅ Correct!").setColor("#007700");
+        } else {
+          this.feedback.setText("❌ Try again").setColor("#aa0000");
+        }
+      });
+    }
+
+    shuffleWord(word) {
+      const arr = word.split("");
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr.join("");
+    }
+  }
+
   const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
-    backgroundColor: '#a2d5f2',
-    scene: {
-      preload: preload,
-      create: create
-    }
+    backgroundColor: '#e3f2fd',
+    parent: 'phaser-game',
+    dom: {
+      createContainer: true
+    },
+    scene: [WordUnscrambleScene]
   };
 
-  const game = new Phaser.Game(config);
-
-  function preload() {
-    this.load.audio('bgMusic', 'bg-music.mp3');
-    this.load.audio('click', 'click.wav');
-    this.load.audio('correct', 'correct.wav');
-    this.load.audio('wrong', 'wrong.wav');
-  }
-
-  function create() {
-    const musicVol = parseFloat(localStorage.getItem("musicVolume") || "0.5");
-    const sfxVol = parseFloat(localStorage.getItem("sfxVolume") || "0.7");
-
-    const bgMusic = this.sound.add("bgMusic", { loop: true, volume: musicVol });
-    bgMusic.play();
-
-    this.add.text(400, 60, "🌍 Word Islands", {
-      fontSize: "36px",
-      fill: "#003",
-      fontFamily: "Quicksand"
-    }).setOrigin(0.5);
-
-    const startBtn = this.add.text(400, 200, "Start Game", {
-      fontSize: "28px",
-      backgroundColor: "#00c2ff",
-      color: "#fff",
-      padding: { x: 20, y: 10 },
-      borderRadius: 10
-    }).setOrigin(0.5).setInteractive();
-
-    startBtn.on("pointerdown", () => {
-      this.sound.play("click", { volume: sfxVol });
-      showIslandScreen.call(this);
-    });
-  }
-
-  function showIslandScreen() {
-    this.add.rectangle(400, 300, 720, 480, 0xe0f7fa).setStrokeStyle(4, 0x004d40);
-    this.add.text(400, 100, "Choose an Island", {
-      fontSize: "32px",
-      fill: "#004d40",
-      fontFamily: "Quicksand"
-    }).setOrigin(0.5);
-
-    const islands = ["Earth", "Water", "Wind", "Fire", "Elemental"];
-    islands.forEach((island, i) => {
-      const btn = this.add.text(200 + i * 120, 250, island, {
-        fontSize: "20px",
-        backgroundColor: "#004d40",
-        color: "#fff",
-        padding: { x: 10, y: 5 }
-      }).setOrigin(0.5).setInteractive();
-
-      btn.on("pointerdown", () => {
-        this.sound.play("click", { volume: 0.7 });
-        this.add.text(400, 450, `You selected ${island} Island`, {
-          fontSize: "18px", fill: "#333"
-        }).setOrigin(0.5);
-      });
-    });
-  }
+  new Phaser.Game(config);
 };
