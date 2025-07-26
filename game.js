@@ -13,10 +13,10 @@ const config = {
 const game = new Phaser.Game(config);
 
 function preload() {
-  this.load.audio('bgMusic', 'assets/audio/bg-music.mp3');
-  this.load.audio('click', 'assets/audio/click.wav');
-  this.load.audio('correct', 'assets/audio/correct.wav');
-  this.load.audio('wrong', 'assets/audio/wrong.wav');
+  this.load.audio('bgMusic', 'bg-music.mp3');
+  this.load.audio('click', 'click.wav');
+  this.load.audio('correct', 'correct.wav');
+  this.load.audio('wrong', 'wrong.wav');
 }
 
 function create() {
