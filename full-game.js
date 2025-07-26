@@ -17,7 +17,7 @@ window.onload = function () {
     this.load.audio('click', 'click.wav');
     this.load.audio('correct', 'correct.wav');
     this.load.audio('wrong', 'wrong.wav');
-  }
+  
 
   function create() {
     const musicVol = parseFloat(localStorage.getItem("musicVolume") || "0.5");
