@@ -13,8 +13,6 @@
       border: 2px solid #333; display: none; font-family: Quicksand;
     }
   </style>
-<script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
-
 </head>
 <body>
   <div id="settings-panel">
@@ -23,6 +21,7 @@
     <label>SFX Volume: <input id="sfx-slider" type="range" min="0" max="1" step="0.01"></label><br>
     <button onclick="document.getElementById('settings-panel').style.display='none';location.reload();">Close</button>
   </div>
+
   <script>
     const musicSlider = document.getElementById("music-slider");
     const sfxSlider = document.getElementById("sfx-slider");
@@ -31,7 +30,10 @@
     musicSlider.oninput = () => localStorage.setItem("musicVolume", musicSlider.value);
     sfxSlider.oninput = () => localStorage.setItem("sfxVolume", sfxSlider.value);
   </script>
+
   <button style="position:absolute;top:10px;right:10px;" onclick="document.getElementById('settings-panel').style.display='block';">⚙️</button>
-  <script src="game.js"></script>
+
+  <!-- 💡 This defer is important! -->
+  <script src="game.js" defer></script>
 </body>
 </html>
